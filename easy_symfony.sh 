@@ -1,0 +1,245 @@
+#!/bin/bash
+#
+#**************************************************************************
+#**                                                                      **
+#**                         Easy Symfony                                 **
+#**                                                                      **
+#**                        Version 1.00.00                               **
+#**                          28 sep 2016                                 **
+#**                       Christian Richert                              **
+#**                                                                      **
+#**************************************************************************
+#
+# Ce Bash fonctionne sur Linux Ubuntu et permet un accès rapide aux fonctions de la console de Symfony.
+# Pour ce faire, choisir le numéro de l'option pour accéder à la fonction.
+#
+# Pour le rendre opérationnel il sera nécessaire de remplacer le chemin du dossier par le votre.
+# Et pour éviter de retapez le nom de votre Bundle il suffira de saisir le nom du votre.
+# Voir les variables "DossierSymfony" et "Bundle" ci dessous en éditant ce fichier.
+#
+# De plus il sera nécessaire de rendre ce fichier éxecutable depuis Nautilus en cliquant avec 
+# la souris droite sur le fichier puis->Propriétés->Permissions->Exécution: Cocher "Autoriser l'éxecution du fichier comme un programme".
+#
+# Un lien (raccourci)peut être créer depuis Nautilus en cliquant avec 
+# la souris droite sur le fichier puis->Créer un lien. Ce lien pourra être déplacer sur le bureau.
+# En cliquant sur ce lien Lancer dans un terminal. 
+
+
+DossierSymfony=/var/www/html/Symfony/ #chemin de votre dossier symfony
+Bundle=OCPlatformBundle #Nom de votre bundle ex: OCPlatformBundle
+
+
+function EffaceCache() {
+		cd $DossierSymfony 
+		sudo php bin/console cache:clear
+		sudo chmod 777 -R var/cache
+		sudo chmod 777 -R var/logs 
+}
+
+function EffaceCacheProd() {
+		cd $DossierSymfony 
+		sudo php bin/console cache:clear --env=prod
+		sudo chmod 777 -R var/cache
+		sudo chmod 777 -R var/logs 
+}
+
+function VoirMapping() {
+		cd $DossierSymfony
+		php bin/console doctrine:mapping:info
+}
+
+function CreerEntite() {
+		echo -e "\nUtiliser le bundle $Bundle:Entity"
+		
+		cd $DossierSymfony
+		php bin/console doctrine:generate:entity 
+}
+
+function UpdateEntite() {
+			
+			echo -e "\nUtiliser le bundle $Bundle:Entity
+		         	   "
+		cd $DossierSymfony 
+		read -p "Saisir le nom de l'entité :" Entite
+			echo -e "\nphp bin/console doctrine:generate:entities $Bundle:$Entite
+				   "
+		read -p "Voulez-vous mettre à jour cette Entité ? y/n : " ouinon
+			if [ "$ouinon" = "y" ] || [ "$ouinon" = "Y" ]; then
+				  php bin/console doctrine:generate:entities $Bundle:$Entite
+			else 
+				echo -e "\nL'entité '$Bundle:$Entite' n'a pas été mise à jour"
+			fi 
+}
+
+function SchemaEntite() {
+		echo -e "\nVerifie la mise à jour de la banque de donnée
+		"
+		cd $DossierSymfony  
+		php bin/console doctrine:schema:update --dump-sql
+}
+
+function ForceEntite() {
+		echo -e "\nMise à jour de la banque de donnée
+		"
+		read -p "Voulez-vous mettre à jour la banque de donnée ? y/n : " ouinon
+			if [ "$ouinon" = "y" ] || [ "$ouinon" = "Y" ]; then
+				cd $DossierSymfony 
+				php bin/console doctrine:schema:update --force
+			else 
+				echo -e "\nLa banque de donnée n'a pas été mise à jour"
+			fi 
+}
+
+function DQLQuery() {
+		
+		read -p "Copier / Saisiser votre requête : " DQLQuery
+		echo -e "\n"
+		cd $DossierSymfony  
+		php bin/console doctrine:query:dql "$DQLQuery"
+
+}
+
+function StartConsole() {
+		echo -e "\n pour afficher l'aide appuyer sur 'Enter'\n"
+		read -p "Saisiser une fonction : " FctConsole
+
+		cd $DossierSymfony 
+		php bin/console $FctConsole
+		
+		
+}
+
+function CreerForm() {
+		echo -e "\nUtiliser le bundle $Bundle:Entity
+		         	   "
+		cd $DossierSymfony 
+		read -p "Saisir le nom de l'entité :" Entite
+		echo -e "\nphp bin/console doctrine:generate:form $Bundle:$Entite \n"
+		read -p "Voulez-vous céer ce formulaire ? y/n : " ouinon
+			if [ "$ouinon" = "y" ] || [ "$ouinon" = "Y" ]; then
+				  php bin/console doctrine:generate:form $Bundle:$Entite
+			else 
+				echo -e "\nL'entité '$Bundle:$Entite' n'a pas été créer"
+			fi
+		
+}
+
+function CreerCRUD() {
+		echo -e "\nUtiliser le bundle $Bundle:Entity
+		         	   "
+		cd $DossierSymfony 
+		read -p "Saisir le nom de l'entité :" Entite
+		echo -e "\nphp bin/console generate:doctrine:crud $Bundle:$Entite \n"
+		read -p "Voulez-vous céer ce CRUD ? y/n : " ouinon
+			if [ "$ouinon" = "y" ] || [ "$ouinon" = "Y" ]; then
+				  php bin/console generate:doctrine:crud $Bundle:$Entite
+			else 
+				echo -e "\nL'entité '$Bundle:$Entite' n'a pas été créer"
+			fi
+		
+}
+
+function Composer() {
+		echo -e "\n composer 
+		         	   "
+		cd $DossierSymfony 
+		read -p "Saisir le nom de la commande:" commande
+		echo -e "\ncomposer $commande \n"
+		read -p "Voulez-vous lancer cette commande ? y/n : " ouinon
+			if [ "$ouinon" = "y" ] || [ "$ouinon" = "Y" ]; then
+				 composer $commande
+			else 
+				echo -e "\nL'composer $commande' n'a pas été lancer"
+			fi
+		
+}
+
+
+title="**************************************************************************
+**                                                                      **
+**                         Easy Symfony                                 **
+**                                                                      **
+**************************************************************************
+
+"
+    prompt="Choisir n°:"
+    options=("Effacer le cache dev"
+    		   "Effacer le cache prod" 
+		   "Voir le mapping" 
+	   	   "Creer une entité"
+	   	   "Mise à jour d'une Entité"
+	   	   "Vérifier Entité => Banque de données"
+	   	   "Forcer  Entité => Banque de données"
+	   	   "Tester les requêtes DQL"
+	   	   "Démarrer la Console"
+	   	   "Créer un formulaire"
+	   	   "Créer un CRUD"
+	   	   "Démarrer Composer"
+	   	   
+	   	   
+	   )
+    echo -e "\033[44m$title\033[0m"
+    echo -e "Dossier de Symfony : $DossierSymfony \nBundle en cours : $Bundle \n"
+
+    PS3="$prompt"
+
+    select opt in "${options[@]}" "Quit/Cancel
+    "; do
+        case "$REPLY" in
+            1) echo -e "\n--------------------------------------------------"
+            	  echo "Option $REPLY -> $opt" 
+            	  	EffaceCache ;;
+            2) echo -e "\n--------------------------------------------------"
+            	  echo "Option $REPLY -> $opt" 
+            	  	EffaceCacheProd ;;
+            	  	
+            3) echo -e "\n--------------------------------------------------"
+            	  echo "Option $REPLY -> $opt" 
+            	  	VoirMapping ;;
+            	  
+            4) echo -e "\n--------------------------------------------------"
+            	  echo "Option $REPLY -> $opt" 
+            	  	CreerEntite ;;
+            	  
+            5) echo -e "\n--------------------------------------------------"
+            	  echo "Option $REPLY -> $opt" 
+            	  	UpdateEntite ;;
+            	  
+            6) echo -e "\n--------------------------------------------------"
+            	  echo "Option $REPLY -> $opt" 
+            	   	SchemaEntite ;;
+            	  
+            7) echo -e "\n--------------------------------------------------"
+            	  echo "Option $REPLY -> $opt" 
+            	   	ForceEntite ;;
+            	   	
+            8) echo -e "\n--------------------------------------------------"
+            	  echo "Option $REPLY -> $opt" 
+            	   	DQLQuery ;;
+
+            9) echo -e "\n--------------------------------------------------"
+            	  echo "Option $REPLY -> $opt" 
+            	   	StartConsole ;;
+
+            10) echo -e "\n--------------------------------------------------"
+            	  echo "Option $REPLY -> $opt" 
+            	   	CreerForm ;;
+
+            11) echo -e "\n--------------------------------------------------"
+            	  echo "Option $REPLY -> $opt" 
+            	   	CreerCRUD ;;
+
+            12) echo -e "\n--------------------------------------------------"
+            	  echo "Option $REPLY -> $opt" 
+            	   	Composer ;;
+            	   	
+            	  
+            $(( ${#options[@]}+1 )) ) clear; echo "Goodbye!"; exit;;
+            *) echo "Ce choix n'existe pas. Essayer un autre.";continue;;
+         esac
+     done
+
+     
+exit 0
+
+
