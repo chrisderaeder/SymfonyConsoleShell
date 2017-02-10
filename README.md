@@ -7,7 +7,6 @@ Shell pour accéder rapidement aux fonctions de la console Symfony
  28 sep 2016  
  Christian Richert  
 
-
  Ce Bash fonctionne sur Linux Ubuntu et permet un accès rapide aux fonctions de la console de Symfony.  
  Pour ce faire, choisir le numéro de l'option pour accéder à la fonction.  
 
@@ -15,12 +14,11 @@ Shell pour accéder rapidement aux fonctions de la console Symfony
  Et pour éviter de retapez le nom de votre Bundle il suffira de saisir le nom du votre.  
  Voir les variables "DossierSymfony" et "Bundle" ci dessous en éditant ce fichier.  
 
- De plus il sera nécessaire de rendre ce fichier éxecutable depuis Nautilus en cliquant avec 
- la souris droite sur le fichier puis->Propriétés->Permissions->Exécution: Cocher "Autoriser l'éxecution du fichier comme un programme".
+ De plus il sera nécessaire de rendre ce fichier éxecutable depuis Nautilus en cliquant avec la souris droite sur le fichier puis->Propriétés->Permissions->Exécution: Cocher "Autoriser l'éxecution du fichier comme un programme".
 
- Un lien (raccourci)peut être créer depuis Nautilus en cliquant avec 
- la souris droite sur le fichier puis->Créer un lien. Ce lien pourra être déplacer sur le bureau.  
- En cliquant sur ce lien Lancer dans un terminal.
+ Un lien (raccourci)peut être créer depuis Nautilus en cliquant avec la souris droite sur le fichier  
+ puis->Créer un lien. Ce lien pourra être déplacer sur le bureau.  
+ En cliquant sur ce lien "Lancer dans un terminal"
 
 - Dossier de Symfony : /var/www/html/Symfony/ 
 - Bundle en cours : OCPlatformBundle
