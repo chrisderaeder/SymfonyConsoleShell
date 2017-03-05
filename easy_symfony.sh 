@@ -11,22 +11,22 @@
 #**************************************************************************
 #
 # Ce Bash fonctionne sur Linux Ubuntu et permet un accès rapide aux fonctions de la console de Symfony.
-# Pour ce faire, choisir le numéro de l'option pour accéder à la fonction.
+# Pour ce faire, choisir le numéro de l'option pour accéder à la fonction
 #
-# Pour le rendre opérationnel il sera nécessaire de remplacer le chemin du dossier par le votre.
-# Et pour éviter de retapez le nom de votre Bundle il suffira de saisir le nom du votre.
-# Voir les variables "DossierSymfony" et "Bundle" ci dessous en éditant ce fichier.
+# Pour le rendre opérationnel il sera nécessaire de remplacer le chemin du dossier par le votre
+# Et pour éviter de retapez le nom de votre Bundle il suffira de saisir le nom du votre
+# Voir les variables "DossierSymfony" et "Bundle" ci dessous.
 #
 # De plus il sera nécessaire de rendre ce fichier éxecutable depuis Nautilus en cliquant avec 
-# la souris droite sur le fichier puis->Propriétés->Permissions->Exécution: Cocher "Autoriser l'éxecution du fichier comme un programme".
+# la souris droite sur le fichier puis->Propriétés->Permissions->Exécution: Cocher "Autoriser l'éxecution du fichier comme un programme"
 #
 # Un lien (raccourci)peut être créer depuis Nautilus en cliquant avec 
 # la souris droite sur le fichier puis->Créer un lien. Ce lien pourra être déplacer sur le bureau.
 # En cliquant sur ce lien Lancer dans un terminal. 
 
 
-DossierSymfony=/var/www/html/Symfony/ #chemin de votre dossier symfony
-Bundle=OCPlatformBundle #Nom de votre bundle ex: OCPlatformBundle
+DossierSymfony=/var/www/html/sitam/ #chemin de votre dossier symfony
+Bundle=AppBundle #Nom de votre bundle ex: OCPlatformBundle
 
 
 function EffaceCache() {
@@ -49,10 +49,19 @@ function VoirMapping() {
 }
 
 function CreerEntite() {
-		echo -e "\nUtiliser le bundle $Bundle:Entity"
-		
-		cd $DossierSymfony
-		php bin/console doctrine:generate:entity 
+		echo -e "\nUtilise le bundle: ' $Bundle '\n"
+
+		cd $DossierSymfony 
+		read -p "Saisir le nom de l'entité : " Entite
+			echo -e "\nphp bin/console doctrine:generate:entity --entity=$Bundle:$Entite
+				   "
+		read -p "Voulez-vous créer cette Entité ? y/n : " ouinon
+			if [ "$ouinon" = "y" ] || [ "$ouinon" = "Y" ]; then
+				  php bin/console doctrine:generate:entity --entity=$Bundle:$Entite
+			else 
+				echo -e "\nL'entité '$Bundle:$Entite' n'a pas été créée"
+			fi 
+
 }
 
 function UpdateEntite() {
@@ -91,7 +100,7 @@ function ForceEntite() {
 }
 
 function DQLQuery() {
-		
+		echo -e "\nExemple: SELECT s.catServName FROM MasterServiceBundle:CategorieService s ORDER BY s.catServName ASC\n"
 		read -p "Copier / Saisiser votre requête : " DQLQuery
 		echo -e "\n"
 		cd $DossierSymfony  
